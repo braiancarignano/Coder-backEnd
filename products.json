@@ -1,1 +1,29 @@
-[]
+[
+  {
+    "title": "Smartphone",
+    "description": "Este es un producto prueba",
+    "price": 400,
+    "thumbnail": "Sin Imagen",
+    "code": "Smartphone123",
+    "stock": 35,
+    "id": 1
+  },
+  {
+    "title": "Logitech",
+    "description": "Teclado 100% USB",
+    "price": 1500,
+    "thumbnail": "Sin Imagen",
+    "code": "Teclado123",
+    "stock": 5,
+    "id": 2
+  },
+  {
+    "title": "Coca Cola",
+    "description": "Bebida",
+    "price": 300,
+    "thumbnail": "Sin Imagen",
+    "code": "Bebida123",
+    "stock": 500,
+    "id": 3
+  }
+]

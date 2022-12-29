@@ -6,9 +6,9 @@ let product = {
   price: 400,
   thumbnail: "Sin Imagen",
   code: "Smartphone123",
-  stock: 12,
-};
+  stock: 35,
 
+};
 let cocaCola = {
   title: "Coca Cola",
   description: "Bebida",
@@ -48,6 +48,15 @@ class ProductManager {
     let items = this.readFile();
     if (items.find((e) => e.code === item.code)) {
       console.log("a CODE has already been assigned");
+    } else if (
+      !!!item.title ||
+      !!!item.description ||
+      !!!item.price ||
+      !!!item.thumbnail ||
+      !!!item.code ||
+      !!!item.stock
+    ) {
+      console.log("Todos los campos son obligatorios");
     } else {
       item.id = items.length > 0 ? items[items.length - 1].id + 1 : 1;
       items.push(item);
@@ -64,26 +73,36 @@ class ProductManager {
   updateProduct(id, product) {
     let data = this.readFile();
     if (data.find((product) => product.id === id)) {
-      let productDeleted = data.filter((product) => product.id !== id);
+      let productUpgrade = data.filter((product) => product.id !== id);
       product.id = id;
-      productDeleted.push(product);
-      this.writeData(productDeleted);
-      return productDeleted;
+      productUpgrade.push(product);
+      this.writeData(productUpgrade);
+      return productUpgrade;
     } else {
       console.log("The product to be updated does not exist");
     }
   }
   deleteProduct(id) {
     let products = this.readFile();
-    if(product = products.filter((e) => e.id != id)){
-    this.writeData(product);}
-    console.log("ID not found")
+    let productDelete = products.filter((e) => e.id != id)
+    if (productDelete.length < products.length) {
+      this.writeData(productDelete);
+    }
+    else{console.log("ID not found");} 
   }
   deleteAll() {
     this.writeData([]);
   }
 }
 const productManager = new ProductManager("products.json");
+
+module.exports ={
+  productManager :  productManager 
+}
+
+
+
+/////////////////////////////////// SECTOR PRUEBAS ///////////////////////////////////
 
 // console.log(productManager.readFile());
 // productManager.addProduct(product);
