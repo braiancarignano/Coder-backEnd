@@ -6,6 +6,7 @@
     "thumbnail": "Sin Imagen",
     "code": "Smartphone123",
     "stock": 35,
+    "status":"true",
     "id": 1
   },
   {
@@ -15,6 +16,7 @@
     "thumbnail": "Sin Imagen",
     "code": "Teclado123",
     "stock": 5,
+    "status":"true",
     "id": 2
   },
   {
@@ -24,6 +26,7 @@
     "thumbnail": "Sin Imagen",
     "code": "Bebida123",
     "stock": 500,
+    "status":"true",
     "id": 3
   }
 ]

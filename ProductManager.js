@@ -1,31 +1,5 @@
 const fs = require("fs");
 
-let product = {
-  title: "Smartphone",
-  description: "Este es un producto prueba",
-  price: 400,
-  thumbnail: "Sin Imagen",
-  code: "Smartphone123",
-  stock: 35,
-
-};
-let cocaCola = {
-  title: "Coca Cola",
-  description: "Bebida",
-  price: 300,
-  thumbnail: "Sin Imagen",
-  code: "Bebida123",
-  stock: 500,
-};
-let teclado = {
-  title: "Logitech",
-  description: "Teclado 100% USB",
-  price: 1500,
-  thumbnail: "Sin Imagen",
-  code: "Teclado123",
-  stock: 5,
-};
-
 class ProductManager {
   path;
   constructor(path) {
@@ -54,6 +28,7 @@ class ProductManager {
       !!!item.price ||
       !!!item.thumbnail ||
       !!!item.code ||
+      !!!item.status ||
       !!!item.stock
     ) {
       console.log("Todos los campos son obligatorios");
@@ -94,7 +69,7 @@ class ProductManager {
     this.writeData([]);
   }
 }
-const productManager = new ProductManager("products.json");
+const productManager = new ProductManager("./database/products.json");
 
 module.exports ={
   productManager :  productManager 

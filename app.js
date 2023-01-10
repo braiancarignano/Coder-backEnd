@@ -1,19 +1,15 @@
-const express = require('express')
-const {productManager} = require("./ProductManager")
-const app = express()
+const express = require('express');
+const app = express();
+const PORT = 8080;
+const { productsRouter } = require('./routers/productsRouter');
+const { cartsRouter } = require('./routers/cartsRouter');
 
-app.get('/products', function (req, res) {
-  const limit = req.query.limit;
-  let data = productManager.readFile();
-  if (limit && !isNaN(Number(limit))) {
-    data = data.slice(0, limit);
-  }
-  res.send(data);
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartsRouter);
+app.get('*', (req,res) => {
+	res.send('Error');
 })
 
-app.get('/products/:id', function (req, res) {
-  let product = productManager.readFile().find((e) => e.id === Number(req.params.id));
- res.send(product)
-})
-
-app.listen(3000)
+app.listen(PORT, () => console.log(`Escuchando en ${PORT}`));
