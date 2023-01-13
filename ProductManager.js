@@ -31,12 +31,15 @@ class ProductManager {
       !!!item.status ||
       !!!item.stock
     ) {
-      console.log("Todos los campos son obligatorios");
-    } else {
+      console.log("All fields are required");
+    } 
+    else if (Object.keys(item).length > 7)
+    {console.log("Fields must not exceed required")}
+    else{
       item.id = items.length > 0 ? items[items.length - 1].id + 1 : 1;
       items.push(item);
-      this.writeData(items);
-    }
+      this.writeData(items);}
+    
   }
   getProductById(id) {
     let idItem = this.readFile().find((e) => e.id === id);
@@ -48,11 +51,11 @@ class ProductManager {
   updateProduct(id, product) {
     let data = this.readFile();
     if (data.find((product) => product.id === id)) {
-      let productUpgrade = data.filter((product) => product.id !== id);
+      let productUpdate = data.filter((product) => product.id !== id);
       product.id = id;
-      productUpgrade.push(product);
-      this.writeData(productUpgrade);
-      return productUpgrade;
+      productUpdate.push(product);
+      this.writeData(productUpdate);
+      return productUpdate;
     } else {
       console.log("The product to be updated does not exist");
     }
