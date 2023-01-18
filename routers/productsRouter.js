@@ -15,10 +15,10 @@ productsRouter.get("/", function (req, res) {
   res.send(data);
 });
 
-productsRouter.get("/:id", function (req, res) {
+productsRouter.get("/:pid", function (req, res) {
   let product = productManager
     .readFile()
-    .find((e) => e.id === Number(req.params.id));
+    .find((e) => e.id === Number(req.params.pid));
   res.send(product);
 });
 
@@ -33,13 +33,13 @@ productsRouter.post("/add", (req, res) => {
   }
 });
 
-productsRouter.put('/update/:id', (req, res) => {
-	productManager.updateProduct(Number(req.params.id), req.body);
+productsRouter.put('/update/:pid', (req, res) => {
+	productManager.updateProduct(Number(req.params.pid), req.body);
 		res.send("Product Update success");	
 });
 
-productsRouter.delete('/delete/:id', (req, res) => {
-	productManager.deleteProduct(Number(req.params.id));
+productsRouter.delete('/delete/:pid', (req, res) => {
+	productManager.deleteProduct(Number(req.params.pid));
 		res.send("Product Delete success");	
 });
 
