@@ -43,39 +43,77 @@ class CartManager {
     }
     console.log("ID not found");
   }
-  addProductCart(cid,pid,quantity) {
-    let productId = productManager.readFile().find((e) => e.id === pid)
-    let productIds = productId.id
-    let cartId=this.carts.find((cart) => cart.id === cid)
-    let products = Object.values(cartId)
-    let productsInCart = products[0]
+  addProductCart(cid, pid) {
+    let dataCarts = this.readFile();
+    let cart = dataCarts.find((e) => e.id === cid);
+    let productInCart = cart.products;
 
-    if (!cartId) {
-      console.log("ID Cart not found")
-    }
-    else if(cartId){ 
-      console.log(productsInCart)
-      let productUpdate = this.carts.filter((cart) => cart.id !== cid);
-      let cartNew = {
-        products: [],
-        id: cid,
+    let dataProducts = productManager.readFile();
+    let product = dataProducts.find((e) => e.id === pid);
+    let productSelect = product.id;
+    let searchProduct = productInCart.find((e) => e.product === pid)
+      if(productInCart.length === 0){
+      let cartUpdate = {
+        id: cart.id,
+        products: [{ product: productSelect, quantity: 1 }],
       };
-      productUpdate.push(cartNew);
-      this.writeData(productUpdate);
+
+      let cartsSave = dataCarts.filter((e) => e.id != cid);
+      let cartsNew = [];
+      cartsNew.push(...cartsSave, cartUpdate);
+      this.writeData(cartsNew);
+
+    }
+    else if (searchProduct){
+      let productsSave = productInCart.filter((e) => e.product != pid);
+      if (productsSave.length){
+        let newQuantity =  searchProduct.quantity + 1
+        let cartUpdate = {
+          id: cart.id,
+          products: [...productsSave, { product: productSelect, quantity: newQuantity }],
+        };
+        console.log(newQuantity)
+        return cartUpdate
+      }
+      let cartUpdate = {
+        id: cart.id,
+        products: [{ product: productSelect, quantity: newQuantity }],
+      };
+  
+      
+      let cartsSave = dataCarts.filter((e) => e.id != cid);
+      let cartsNew = [];
+      cartsNew.push(...cartsSave, cartUpdate);
+      this.writeData(cartsNew);
+      
+    }
+    else{
+      let cartUpdate = {
+        id: cart.id,
+        products: [...productInCart, { product: productSelect, quantity: 1 }],
+      };
+      
+      let cartsSave = dataCarts.filter((e) => e.id != cid);
+      let cartsNew = [];
+      cartsNew.push(...cartsSave, cartUpdate);
+      this.writeData(cartsNew);
+
     }
   }
   deleteCart(id) {
     let cart = this.readFile();
-    let cartDelete = cart.filter((e) => e.id != id)
+    let cartDelete = cart.filter((e) => e.id != id);
     if (cartDelete.length < cart.length) {
       this.writeData(cartDelete);
+    } else {
+      console.log("ID not found");
     }
-    else{console.log("ID not found");} 
   }
 }
 
 const cartManager = new CartManager("./database/carts.json");
-cartManager.addProductCart(3,1)
+cartManager.addProductCart(1,1)
+
 module.exports = {
   cartManager: cartManager,
 };
