@@ -115,7 +115,6 @@ class CartManager {
 }
 
 const cartManager = new CartManager("./database/carts.json");
-cartManager.addProductCart(2,2)
 
 module.exports = {
   cartManager: cartManager,

@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const cartRouter = express.Router();
-const { cartManager } = require("../cartManager");
+const { cartManager } = require("../controllers/CartManager");
 
 cartRouter.get("/:cid", function (req, res) {
   let cart = cartManager

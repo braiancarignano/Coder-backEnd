@@ -1,7 +1,7 @@
 const express = require("express");
 const app = express();
 const productsRouter = express.Router();
-const { productManager } = require("../ProductManager");
+const { productManager } = require("../controllers/ProductManager");
 
 productsRouter.get("/", function (req, res) {
   const limit = req.query.limit;
