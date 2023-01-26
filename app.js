@@ -28,11 +28,17 @@ socketServer.on("connection", socket => {
     socket.on("mensaje", data => {
         console.log(data)
     })
-    socketServer.emit("mesagge", "Este mensaje es enviado desde el servidor a todos")
-    socketServer.emit("products", productManager.readFile() )
+    socket.emit("mesagge", "Este mensaje es enviado desde el servidor a todos")
+    socket.on("productoNuevo", (data)=>{
+        productManager.addProduct(data)
+    })
+    socket.on("idEliminar", (data)=>{
+        productManager.deleteProduct(data)
+    })
+    let products = productManager.readFile()
+    socket.emit("products", products)
+   
 })
-
-
 
 
 
