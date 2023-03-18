@@ -1,27 +1,3 @@
-let toggleBtn = document.querySelector("#navbar-toggle");
-let collapse = document.querySelector("#navbar-collapse");
-toggleBtn.onclick = () => {
-  collapse.classList.toggle("hidden");
-  collapse.classList.toggle("flex");
-};
-
-const logOut = document
-  .querySelector("#logout")
-  .addEventListener("click", async () => {
-    try {
-      const response = await fetch("http://localhost:8080/api/sessions/logout");
-      const data = await response.json();
-      console.log(data);
-      if (data.message === "LogoutOK") {
-        window.location.href = "/login";
-      } else {
-        alert("logout failed");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  });
-
 const elementExists = (id) => document.getElementById(id) !== null;
 
 function getCurrentURL() {
@@ -55,9 +31,11 @@ const fetchProductsContainer = async () => {
   const query = convertParamsToQuery(params);
   const response = await fetch(`http://localhost:8080/api/products?${query}`);
   const data = await response.json();
+  console.log(data);
   const myElement = document.getElementById("productsContainer");
   myElement.innerHTML = data.payload.map((product) => {
-    return `<div class="w-64 bg-white border shadow-2xl rounded-xl m-6">
+    return `
+ <div class="w-64 bg-white border shadow-2xl rounded-xl m-6">
   <div class="h-56 rounded-t-xl bg-gray-300 flex flex-col justify-center bg-cover bg-center">
     <h2 class="absolute text-sm bg-blue-700 rounded-3xl text-white p-2 font-medium mt-52 ml-2">
       OFERTA
@@ -73,8 +51,10 @@ const fetchProductsContainer = async () => {
       <button class="my-4 py-2 px-8 font-semibold shadow-lg shadow-blue-700/50 bg-blue-700 text-white rounded-2xl hover:bg-indigo-600 active:bg-indigo-700 disabled:opacity-50 w-full flex items-center justify-center">
         AGREGAR AL CARRITO
       </button>
+    </Link>
   </div>
-</div>`;
+</div>
+            `;
   });
 };
 elementExists("productsContainer") && fetchProductsContainer();

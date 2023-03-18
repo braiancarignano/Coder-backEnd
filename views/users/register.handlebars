@@ -1,0 +1,88 @@
+<!-- component -->
+<div
+  class="min-h-screen p-6 bg-gradient-to-tr from-blue-800 to-purple-700 flex items-center justify-center"
+>
+  <div class="container max-w-screen-lg mx-auto">
+    <div>
+      <div class="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">
+        <div class="grid gap-4 gap-y-2 text-sm grid-cols-1 lg:grid-cols-3">
+          <div class="text-gray-600">
+            <p class="font-medium text-lg">¡Registrate!</p>
+            <p class="my-2">Para crear una cuenta debes completar los siguientes campos.</p>
+          </div>
+
+          <form id="register" class="lg:col-span-2">
+              <div class="md:col-span-3">
+                <label for="nombre">Nombre</label>
+                <input
+                  type="text"
+                  name="nombre"
+                  id="first_name"
+                  class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                  value=""
+                  placeholder=""
+                />
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="apellido">Apellido</label>
+                <input
+                  type="text"
+                  name="apellido"
+                  id="last_name"
+                  class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                  value=""
+                  placeholder=""
+                />
+              </div>
+                <div class="md:col-span-2">
+                <label for="password">Contraseña</label>
+                <input
+                  type="password"
+                  name="password"
+                  id="password"
+                  class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                  value=""
+                  placeholder=""
+                />
+              </div>
+              <div class="md:col-span-5">
+                <label for="age">Edad</label>
+                <input
+                  type="text"
+                  name="age"
+                  id="age"
+                  class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                  value=""
+                  placeholder=""
+                />
+              </div>
+              <div class="md:col-span-5">
+                <label for="email">Email</label>
+                <input
+                  type="text"
+                  name="email"
+                  id="email"
+                  class="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+                  value=""
+                  placeholder="email@email.com"
+                />
+              </div>
+              <div class="md:col-span-5 text-right">
+                <div class="items-end">
+                  <button
+                    class="bg-indigo-600 p-4 rounded-2xl text-white font-semibold mt-6 m-3"
+                    type="submit"
+                  >Registrarme</button>
+                  <p class="text-sm mt-3 mx-4">¿Ya tienes una cuenta?</p>
+                  <a href="/login" class="text-sm mx-5 text-indigo-600 cursor-pointer">Inicia sesión</a>
+                </div>
+              </div>
+            </form>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
