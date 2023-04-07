@@ -56,7 +56,7 @@ const fetchProductsContainer = async () => {
   const response = await fetch(`http://localhost:8080/api/products?${query}`);
   const data = await response.json();
   const myElement = document.getElementById("productsContainer");
-  myElement.innerHTML = data.payload.map((product) => {
+  myElement.innerHTML = data.result.payload.map((product) => {
     return `<div class="w-64 bg-white border shadow-2xl rounded-xl m-6">
   <div class="h-56 rounded-t-xl bg-gray-300 flex flex-col justify-center bg-cover bg-center">
     <h2 class="absolute text-sm bg-blue-700 rounded-3xl text-white p-2 font-medium mt-52 ml-2">

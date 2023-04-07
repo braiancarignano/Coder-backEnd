@@ -13,11 +13,11 @@ const COOKIE_SECRET = process.env.COOKIE_SECRET;
 const SESSION_SECRET = process.env.SESSION_SECRET;
 const handlebars = require("express-handlebars");
 const { Server } = require("socket.io");
-const { productsRouter } = require("./routers/productsRouter");
-const { cartRouter } = require("./routers/cartsRouter");
-const { viewsRouter } = require("./routers/viewsRouter.js");
-const { userRouter } = require("./routers/userRouter.js");
-const { gitHubRouter } = require("./routers/gitHubRouter.js");
+const { productsRouter } = require("./routes/products.router.js");
+const { cartRouter } = require("./routes/carts.router.js");
+const { viewsRouter } = require("./routes/views.router.js");
+const { userRouter } = require("./routes/user.router.js");
+const { gitHubRouter } = require("./routes/gitHub.router.js");
 const httpServer = app.listen(PORT, () => console.log(`Escuchando en ${PORT}`));
 const socketServer = new Server(httpServer);
 

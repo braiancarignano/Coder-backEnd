@@ -31,9 +31,9 @@ const fetchProductsContainer = async () => {
   const query = convertParamsToQuery(params);
   const response = await fetch(`http://localhost:8080/api/products?${query}`);
   const data = await response.json();
-  console.log(data);
+  console.log(data.result.payload);
   const myElement = document.getElementById("productsContainer");
-  myElement.innerHTML = data.payload.map((product) => {
+  myElement.innerHTML = data.result.payload.map((product) => {
     return `
  <div class="w-64 bg-white border shadow-2xl rounded-xl m-6">
   <div class="h-56 rounded-t-xl bg-gray-300 flex flex-col justify-center bg-cover bg-center">
@@ -51,7 +51,6 @@ const fetchProductsContainer = async () => {
       <button class="my-4 py-2 px-8 font-semibold shadow-lg shadow-blue-700/50 bg-blue-700 text-white rounded-2xl hover:bg-indigo-600 active:bg-indigo-700 disabled:opacity-50 w-full flex items-center justify-center">
         AGREGAR AL CARRITO
       </button>
-    </Link>
   </div>
 </div>
             `;

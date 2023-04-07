@@ -16,7 +16,6 @@ userRouter.post(
 );
 
 userRouter.get("/failregister", async (req, res) => {
-  console.log("failed Strategy");
   res.send({ error: "Failed Strategy" });
 });
 
@@ -42,7 +41,6 @@ userRouter.post(
 );
 
 userRouter.get("/faillogin", async (req, res) => {
-  console.log("failed Strategy");
   res.send({ error: "Failed Strategy" });
 });
 

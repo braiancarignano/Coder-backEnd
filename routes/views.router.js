@@ -1,6 +1,6 @@
 const express = require("express");
 const viewsRouter = express.Router();
-const modelProducts = require("../models/products.js");
+const modelProducts = require("../dao/models/products.js");
 
 const auth = async (req, res, next) => {
   if (await req.session?.user) {
