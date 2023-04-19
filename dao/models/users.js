@@ -8,6 +8,10 @@ const userSchema = new mongoose.Schema(
     email: { type: String, unique: true },
     password: String,
     rol: { type: String, default: "Consumer" },
+    cart: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "carts",
+    },
   },
   {
     versionKey: false,

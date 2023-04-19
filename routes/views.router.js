@@ -12,25 +12,31 @@ const auth = async (req, res, next) => {
   }
 };
 
+const adminAuth = async (req, res, next) => {
+  if (await req.session?.user) {
+    if (req.session.user.rol === "admin") {
+      return next();
+    }
+  }
+  return res
+    .status(401)
+    .render("users/login", { script: "login", title: "Inicio Sesion" });
+};
+
 viewsRouter.get("/", auth, async (req, res) => {
   const userInfo = await req.session.user;
   res.render("index", { script: "index", title: "Inicio", userInfo });
-});
-
-viewsRouter.get("/realtimeproducts", async (req, res) => {
-  const products = await modelProducts.find().lean();
-  res.render("realTimeProducts", {
-    products,
-    title: "Productos en tiempo real",
-  });
 });
 
 viewsRouter.get("/products", auth, async (req, res) => {
   res.render("products/products", { script: "products", title: "Productos" });
 });
 
-viewsRouter.get("/carts", auth, async (req, res) => {
-  res.render("products/carts", { script: "carts", title: "Carritos" });
+viewsRouter.get("/administrador", adminAuth, async (req, res) => {
+  res.render("products/adminProducts", {
+    script: "products",
+    title: "Administrador",
+  });
 });
 
 viewsRouter.get("/login", async (req, res) => {

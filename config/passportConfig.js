@@ -1,10 +1,13 @@
 const passport = require("passport");
 const local = require("passport-local");
 const GithubStrategy = require("passport-github2");
-const { isValidPassword, createHash } = require("../utils.js");
+const { isValidPassword, createHash } = require("./utils.js");
+const Cart = require("../dao/classes/carts.dao.js");
+const CartService = new Cart();
 const User = require("../dao/classes/users.dao.js");
 const UserService = new User();
 const LocalStrategy = local.Strategy;
+const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = require("./config.js");
 
 const initializePassport = () => {
   passport.use(
@@ -18,7 +21,7 @@ const initializePassport = () => {
         const { first_name, last_name, email, age } = req.body;
         try {
           const user = await UserService.searchUser(username);
-          console.log(user);
+          const carts = await CartService.createCart();
           if (user)
             return done(null, false, { message: "El usuario ya existe" });
           const newUser = {
@@ -27,6 +30,7 @@ const initializePassport = () => {
             email,
             age,
             password: createHash(password),
+            cart: carts,
           };
           const response = await UserService.createUser(newUser);
           return done(null, response);
@@ -58,9 +62,6 @@ const initializePassport = () => {
   );
 
   //registro con github
-
-  const GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID;
-  const GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET;
 
   passport.use(
     "github",

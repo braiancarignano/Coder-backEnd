@@ -34,6 +34,7 @@ userRouter.post(
       last_name: req.user.last_name,
       email: req.user.email,
       age: req.user.age,
+      rol: req.user.rol,
     };
     req.session.admin = true;
     return res.status(200).send({ message: "success" });
