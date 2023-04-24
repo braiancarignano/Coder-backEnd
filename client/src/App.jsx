@@ -29,7 +29,7 @@ function App() {
                   path="/adminproducts"
                   element={
                     <PrivateRoute>
-                      <DashboardPage />
+                      <AdminProducts />
                     </PrivateRoute>
                   }
                 />

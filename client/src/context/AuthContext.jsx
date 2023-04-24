@@ -65,13 +65,7 @@ const AuthProvider = ({ children }) => {
       const response = await axios.get(
         "http://localhost:8080/api/sessions/current"
       );
-      const data = response.data;
-      console.log(data);
-      if (data.message === "LogoutOK") {
-        window.location.href = "/login";
-      } else {
-        alert("logout failed");
-      }
+      return console.log(response);
     } catch (error) {
       console.log(error);
     }

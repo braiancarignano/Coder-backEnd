@@ -12,12 +12,10 @@ const {
   COOKIE_SECRET,
   SESSION_SECRET,
 } = require("./config/config.js");
-const handlebars = require("express-handlebars");
 const cors = require("cors");
 const { Server } = require("socket.io");
 const { productsRouter } = require("./routes/products.router.js");
 const { cartRouter } = require("./routes/carts.router.js");
-const { viewsRouter } = require("./routes/views.router.js");
 const { userRouter } = require("./routes/user.router.js");
 const { gitHubRouter } = require("./routes/gitHub.router.js");
 const { mockingRouter } = require("./routes/mockingProducts.router.js");
@@ -30,7 +28,7 @@ app.use(
     store: MongoStore.create({
       mongoUrl: LINK_DB,
       mongoOptions: { useNewUrlParser: true, useUnifiedTopology: true },
-      ttl: 200,
+      ttl: 600,
     }),
     secret: SESSION_SECRET,
     resave: true,
@@ -56,13 +54,10 @@ app.use("/api/carts", cartRouter);
 app.use("/api/sessions", userRouter);
 app.use("/api/sessions", gitHubRouter);
 app.use("/api/mockingproducts", mockingRouter);
-
-//handlebars
-app.engine("handlebars", handlebars.engine());
-app.set("views", __dirname + "/views");
-app.set("view engine", "handlebars");
-app.use(express.static(__dirname + "/public"));
-app.use("/", viewsRouter);
+app.use((req, res, next) => {
+  res.locals.session = req.session;
+  next();
+});
 
 socketServer.on("connection", (socket) => {
   console.log("Nuevo cliente conectado");

@@ -1,6 +1,7 @@
 const express = require("express");
 const passport = require("passport");
 const userRouter = express.Router();
+const CurrentDTO = require("../dto/current.dto");
 
 userRouter.post(
   "/register",
@@ -32,14 +33,28 @@ userRouter.post(
     req.session.user = {
       first_name: req.user.first_name,
       last_name: req.user.last_name,
-      email: req.user.email,
       age: req.user.age,
+      email: req.user.email,
       rol: req.user.rol,
+      cart: req.user.cart,
     };
-    req.session.admin = true;
-    return res.status(200).send({ message: "success", user: req.session.user });
+    console.log(req.session);
+    return res
+      .status(200)
+      .send({ message: "success", payload: req.session.user });
   }
 );
+
+userRouter.get("/current", async (req, res) => {
+  console.log(req.session);
+  // if (req.session.user === undefined) {
+  //   return res
+  //     .status(401)
+  //     .send({ status: "error", message: "No hay una sesión iniciada" });
+  // }
+  // let user = new CurrentDTO(req.session.user);
+  // res.status(200).send(user);
+});
 
 userRouter.get("/faillogin", async (req, res) => {
   res.send({ error: "Failed Strategy" });

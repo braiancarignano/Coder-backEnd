@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import image from "../../assets/github.png";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../context/AuthContext";
@@ -16,8 +16,7 @@ const LoginForm = () => {
   const loginSubmit = async () => {
     try {
       await login(username, password);
-      <redirect to="/" />;
-      console.log(User);
+      window.location.href = "/";
     } catch (error) {
       console.error(error);
     }
