@@ -13,8 +13,7 @@ gitHubRouter.get(
   passport.authenticate("github", { failureRedirect: "/login" }),
   async (req, res) => {
     req.session.user = req.user;
-
-    res.redirect("/");
+    res.redirect("http://localhost:5173/");
   }
 );
 

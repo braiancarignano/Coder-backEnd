@@ -37,7 +37,7 @@ userRouter.post(
       rol: req.user.rol,
     };
     req.session.admin = true;
-    return res.status(200).send({ message: "success" });
+    return res.status(200).send({ message: "success", user: req.session.user });
   }
 );
 

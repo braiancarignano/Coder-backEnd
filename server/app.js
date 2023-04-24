@@ -13,6 +13,7 @@ const {
   SESSION_SECRET,
 } = require("./config/config.js");
 const handlebars = require("express-handlebars");
+const cors = require("cors");
 const { Server } = require("socket.io");
 const { productsRouter } = require("./routes/products.router.js");
 const { cartRouter } = require("./routes/carts.router.js");
@@ -43,6 +44,13 @@ app.use(passport.session());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    credentials: true,
+  })
+);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartRouter);
 app.use("/api/sessions", userRouter);

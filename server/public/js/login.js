@@ -6,6 +6,7 @@ const login = document
     const password = document.querySelector("#password").value;
 
     try {
+      console.log(username, password);
       const response = await fetch("http://localhost:8080/api/sessions/login", {
         method: "POST",
         headers: {
@@ -18,8 +19,6 @@ const login = document
       });
 
       const data = await response.json();
-
-      console.log(username, password);
       if (data.message === "success") {
         window.location.href = "/";
       } else {
