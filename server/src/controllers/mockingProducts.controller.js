@@ -1,12 +1,15 @@
 const { generateProduct } = require("../config/utils.js");
+const Product = require("../dao/classes/products.dao.js");
+const ProductService = new Product();
 
 const mockingProducts = async (req, res) => {
   try {
-    let products = [];
-    for (let i = 0; i < 100; i++) {
-      products.push(generateProduct());
+    for (let i = 0; i < 5; i++) {
+      const result = generateProduct();
+      await ProductService.createProduct(result);
+      console.log(result);
     }
-    res.status(200).send(products);
+    res.send({ status: "success" });
   } catch (err) {
     res.status(500).send("error");
   }

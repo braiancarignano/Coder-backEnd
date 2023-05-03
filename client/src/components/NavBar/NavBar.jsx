@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom";
 import { useAuthContext } from "../../context/AuthContext";
 const NavBar = () => {
-  const { logOut } = useAuthContext();
   //Renderiza menu de navegacion en la parte superior
   return (
     <nav className="bg-white py-2 md:py-4 bg-gradient-to-tr from-blue-800 to-purple-700">
@@ -35,13 +34,14 @@ const NavBar = () => {
               Contacto
             </button>
           </Link>
-          <button
-            onClick={logOut}
-            type="button"
-            className="p-2 lg:px-4 text-white text-center font-semibold border border-solid border-white rounded hover:bg-indigo-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1"
-          >
-            Cerrar Sesión
-          </button>
+          <Link to="/login">
+            <button
+              type="button"
+              className="p-2 lg:px-4 text-white text-center font-semibold border border-solid border-white rounded hover:bg-indigo-600 hover:text-white transition-colors duration-300 mt-1 md:mt-0 md:ml-1"
+            >
+              Cerrar Sesión
+            </button>
+          </Link>
         </div>
       </div>
     </nav>

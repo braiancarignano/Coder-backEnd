@@ -1,5 +1,8 @@
 const Product = require("../dao/classes/products.dao.js");
 const ProductService = new Product();
+const { CustomError } = require("../services/errors/customErrors.js");
+const EErrors = require("../services/errors/enum.js");
+const { generateProductsErrorInfo } = require("../services/errors/info.js");
 
 const getProduct = async (req, res) => {
   const stock = req.query.stock;
@@ -31,14 +34,58 @@ const getProductById = async (req, res) => {
       .send({ status: "error", message: "Something went wrong" });
   res.send({ status: "success", result });
 };
-const createProduct = async (req, res) => {
-  const product = req.body;
-  let result = await ProductService.createProduct(product);
-  if (!result)
-    return res
-      .status(404)
-      .send({ status: "error", message: "Something went wrong" });
-  res.send({ status: "success", result });
+const createProduct = async (req, res, next) => {
+  try {
+    const { title, description, code, price, thumbnail, stock, category } =
+      req.body;
+    if (
+      !title ||
+      !description ||
+      !code ||
+      !price ||
+      !thumbnail ||
+      !stock ||
+      !category
+    ) {
+      CustomError.createError({
+        name: "Product creation error",
+        cause: generateProductsErrorInfo({
+          title,
+          description,
+          code,
+          price,
+          thumbnail,
+          stock,
+          category,
+        }),
+        message: "Error trying to create Product",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    }
+    const product = {
+      title,
+      description,
+      code,
+      price,
+      thumbnail,
+      stock,
+      category,
+    };
+    let response = await ProductService.createProduct(product);
+    req.logger.info(
+      `${req.method} en ${
+        req.url
+      }- ${new Date().toLocaleTimeString()} - Producto creado exitosamente`
+    );
+    res.status(200).send({ message: "Producto creado", response });
+  } catch (error) {
+    req.logger.error(
+      `${req.method} en ${
+        req.url
+      }- ${new Date().toLocaleTimeString()} - Error al crear el producto`
+    );
+    next(error);
+  }
 };
 
 const updateProduct = async (req, res) => {

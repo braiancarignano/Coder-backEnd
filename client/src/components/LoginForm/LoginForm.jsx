@@ -1,25 +1,26 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
+import { useState } from "react";
 import image from "../../assets/github.png";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../context/AuthContext";
 
 const LoginForm = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const { login } = useAuthContext();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
-  const { login, User } = useAuthContext();
-  const loginSubmit = async () => {
-    try {
-      await login(username, password);
-      window.location.href = "/";
-    } catch (error) {
-      console.error(error);
-    }
+
+  const [isSubmitted, setIsSubmitted] = useState(false);
+
+  const onSubmit = async (data) => {
+    const username = data.email;
+    const password = data.password;
+    await login(username, password);
+    reset();
+    setIsSubmitted(true);
   };
 
   return (
@@ -46,7 +47,7 @@ const LoginForm = () => {
           <div className="absolute -top-20 -right-20 w-80 h-80 border-4 rounded-full border-opacity-30 border-t-8"></div>
         </div>
         <div className="flex md:w-1/2 justify-center py-10 items-center bg-white">
-          <form className="bg-white" onSubmit={handleSubmit(loginSubmit)}>
+          <form className="bg-white" onSubmit={handleSubmit(onSubmit)}>
             <h1 className="text-gray-800 font-bold text-2xl mb-1">
               ¡Bienvenido!
             </h1>
@@ -71,11 +72,23 @@ const LoginForm = () => {
               <input
                 className="pl-2 outline-none border-none"
                 type="text"
-                name="username"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                {...register("email", {
+                  required: {
+                    value: true,
+                    message: "Tienes que colocar tu email",
+                  },
+                  minLength: {
+                    value: 3,
+                    message: "El email debe tener al menos 3 caracteres",
+                  },
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                    message: "El email no es válido",
+                  },
+                })}
                 placeholder="Email"
               />
+              <small className="text-red-400">{errors?.email?.message}</small>
             </div>
             <div className="flex items-center border-2 py-2 px-3 rounded-2xl">
               <svg
@@ -93,11 +106,21 @@ const LoginForm = () => {
               <input
                 className="pl-2 outline-none border-none"
                 type="password"
-                name=""
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                {...register("password", {
+                  required: {
+                    value: true,
+                    message: "Tienes que colocar tu contraseña",
+                  },
+                  minLength: {
+                    value: 8,
+                    message: "Debe tener al menos 8 caracteres",
+                  },
+                })}
                 placeholder="Contraseña"
               />
+              <small className="text-red-400">
+                {errors?.password?.message}
+              </small>
             </div>
             <button
               type="submit"
@@ -123,6 +146,7 @@ const LoginForm = () => {
                 <img className="mx-2 w-6 h-6" src={image} />
               </a>
             </div>
+            {isSubmitted && <Navigate to="/" />}
           </form>
         </div>
       </div>

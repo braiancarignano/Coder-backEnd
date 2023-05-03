@@ -1,29 +1,28 @@
-import React, { useState } from "react";
+import { Link, Navigate } from "react-router-dom";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../context/AuthContext";
 
 const Form = () => {
+  const { registerUser } = useAuthContext();
+  const [isSubmitted, setIsSubmitted] = useState(false);
   //Desestructura utilidad de libreria para validaciones
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
-
-  const [first_name, setFirstName] = useState("");
-  const [last_name, setLastName] = useState("");
-  const [password, setPassword] = useState("");
-  const [email, setEmail] = useState("");
-  const [age, setAge] = useState("");
-
-  const { registerUser } = useAuthContext();
-  const registerSubmit = async () => {
-    try {
-      await registerUser(first_name, last_name, email, password, age);
-      window.location.href = "/login";
-    } catch (error) {
-      console.error(error);
-    }
+  const onSubmit = async (data) => {
+    const first_name = data.first_name;
+    const last_name = data.last_name;
+    const email = data.email;
+    const password = data.password;
+    const age = data.age;
+    await registerUser(first_name, last_name, email, password, age);
+    alert("Registro exitoso");
+    reset();
+    setIsSubmitted(true);
   };
 
   //Renderizado de formulario para compra/consulta con sus validaciones y mensajes de error
@@ -40,66 +39,109 @@ const Form = () => {
                 </p>
               </div>
 
-              <form
-                id="register"
-                onSubmit={handleSubmit(registerSubmit)}
-                className="lg:col-span-2"
-              >
+              <form onSubmit={handleSubmit(onSubmit)} className="lg:col-span-2">
                 <div className="md:col-span-3">
                   <label htmlFor="nombre">Nombre</label>
                   <input
                     type="text"
-                    name="nombre"
                     className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                    value={first_name}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    placeholder=""
+                    {...register("first_name", {
+                      required: {
+                        value: true,
+                        message: "Tienes que colocar tu nombre",
+                      },
+                      minLength: {
+                        value: 2,
+                        message: "Debe tener al menos 2 caracteres",
+                      },
+                    })}
                   />
+                  <small className="text-red-400">
+                    {errors?.first_name?.message}
+                  </small>
                 </div>
 
                 <div className="md:col-span-2">
                   <label htmlFor="apellido">Apellido</label>
                   <input
                     type="text"
-                    name="apellido"
                     className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                    value={last_name}
-                    onChange={(e) => setLastName(e.target.value)}
-                    placeholder=""
+                    {...register("last_name", {
+                      required: {
+                        value: true,
+                        message: "Tienes que colocar tu apellido",
+                      },
+                      minLength: {
+                        value: 2,
+                        message: "Debe tener al menos 2 caracteres",
+                      },
+                    })}
                   />
+                  <small className="text-red-400">
+                    {errors?.last_name?.message}
+                  </small>
                 </div>
                 <div className="md:col-span-2">
                   <label htmlFor="password">Contraseña</label>
                   <input
                     type="password"
-                    name="password"
                     className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    placeholder=""
+                    {...register("password", {
+                      required: {
+                        value: true,
+                        message: "Tienes que colocar una contraseña",
+                      },
+                      minLength: {
+                        value: 8,
+                        message: "Debe tener al menos 8 caracteres",
+                      },
+                    })}
                   />
+                  <small className="text-red-400">
+                    {errors?.password?.message}
+                  </small>
                 </div>
                 <div className="md:col-span-5">
                   <label htmlFor="age">Edad</label>
                   <input
-                    type="text"
-                    name="age"
+                    type="number"
                     className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                    value={age}
-                    onChange={(e) => setAge(e.target.value)}
-                    placeholder=""
+                    {...register("age", {
+                      required: {
+                        value: true,
+                        message: "Tienes que colocar tu edad",
+                      },
+                      minLength: {
+                        value: 2,
+                        message: "Debe tener al menos 2 caracteres",
+                      },
+                    })}
                   />
+                  <small className="text-red-400">{errors?.age?.message}</small>
                 </div>
                 <div className="md:col-span-5">
                   <label htmlFor="email">Email</label>
                   <input
                     type="text"
-                    name="email"
                     className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="email@email.com"
+                    {...register("email", {
+                      required: {
+                        value: true,
+                        message: "Tienes que colocar tu email",
+                      },
+                      minLength: {
+                        value: 3,
+                        message: "El email debe tener al menos 3 caracteres",
+                      },
+                      pattern: {
+                        value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i,
+                        message: "El email no es válido",
+                      },
+                    })}
                   />
+                  <small className="text-red-400">
+                    {errors?.email?.message}
+                  </small>
                 </div>
                 <div className="md:col-span-5 text-right">
                   <div className="items-end">
@@ -118,6 +160,7 @@ const Form = () => {
                     </a>
                   </div>
                 </div>
+                {isSubmitted && <Navigate to="/login" />}
               </form>
             </div>
           </div>

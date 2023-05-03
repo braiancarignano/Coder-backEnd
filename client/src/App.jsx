@@ -9,7 +9,7 @@ import Products from "./pages/Products";
 import Contact from "./pages/Contact";
 import Checkout from "./pages/Checkout";
 import AdminProducts from "./pages/AdminProducts";
-import PrivateRoute from "./components/PrivateRoute/PrivateRoute";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -25,14 +25,8 @@ function App() {
                 <Route path="/products" element={<Products />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/checkout" element={<Checkout />} />
-                <Route
-                  path="/adminproducts"
-                  element={
-                    <PrivateRoute>
-                      <AdminProducts />
-                    </PrivateRoute>
-                  }
-                />
+                <Route path="/adminproducts" element={<AdminProducts />} />
+                <Route path="/profile" element={<Profile />} />
               </Routes>
             </CartProvider>
           </ProductsProvider>

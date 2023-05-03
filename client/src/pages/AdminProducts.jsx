@@ -1,10 +1,8 @@
-import { useAuthContext } from "../context/AuthContext";
+import ProductFormContainer from "../components/ProductFormContainer/ProductFormContainer";
 const AdminProducts = () => {
-  const { isLogged } = useAuthContext();
   return (
     <div>
-      <h1>AdminProducts</h1>
-      <button onClick={isLogged}>isLogged</button>
+      <ProductFormContainer />
     </div>
   );
 };

@@ -7,7 +7,15 @@ const CartService = new Cart();
 const User = require("../dao/classes/users.dao.js");
 const UserService = new User();
 const LocalStrategy = local.Strategy;
-const { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } = require("./config.js");
+const jwt = require("passport-jwt");
+const ExtractJwt = jwt.ExtractJwt;
+const JWTStrategy = jwt.Strategy;
+const {
+  GITHUB_CLIENT_ID,
+  GITHUB_CLIENT_SECRET,
+  SESSION_SECRET,
+} = require("./config.js");
+const { error } = require("winston");
 
 const initializePassport = () => {
   passport.use(
@@ -34,8 +42,13 @@ const initializePassport = () => {
           };
           const response = await UserService.createUser(newUser);
           return done(null, response);
-        } catch (err) {
-          return done("error al obtener usuario" + err);
+        } catch (error) {
+          req.logger.error(
+            `${req.method} en ${
+              req.url
+            }- ${new Date().toLocaleTimeString()} - Error al registrar el usuario`
+          );
+          return done(error);
         }
       }
     )
@@ -54,8 +67,13 @@ const initializePassport = () => {
           if (!isValidPassword(user, password))
             return done(null, false, { message: "Contraseña incorrecta" });
           return done(null, user);
-        } catch (err) {
-          return done("error al obtener usuario" + err);
+        } catch (error) {
+          req.logger.error(
+            `${req.method} en ${
+              req.url
+            }- ${new Date().toLocaleTimeString()} - Error al loguear el usuario`
+          );
+          return done(error);
         }
       }
     )
@@ -87,12 +105,46 @@ const initializePassport = () => {
           } else {
             return done(null, user);
           }
-        } catch (err) {
-          return done("error al obtener usuario" + err);
+        } catch (error) {
+          req.logger.error(
+            `${req.method} en ${
+              req.url
+            }- ${new Date().toLocaleTimeString()} - error al obtener usuario`
+          );
+          return done(error);
         }
       }
     )
   );
+  passport.use(
+    "jwt",
+    new JWTStrategy(
+      {
+        jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+        secretOrKey: SESSION_SECRET,
+      },
+      async (jwt_payload, done) => {
+        try {
+          return done(null, jwt_payload);
+        } catch (error) {
+          req.logger.error(
+            `${req.method} en ${
+              req.url
+            }- ${new Date().toLocaleTimeString()} - Error al crear token`
+          );
+          return done(error);
+        }
+      }
+    )
+  );
+};
+
+const cookieExtractor = (req) => {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.cookies["CookieToken"];
+  }
+  return token;
 };
 
 passport.serializeUser((user, done) => {

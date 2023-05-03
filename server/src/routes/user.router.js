@@ -1,7 +1,9 @@
 const express = require("express");
 const passport = require("passport");
 const userRouter = express.Router();
-const CurrentDTO = require("../dto/current.dto");
+const jwt = require("jsonwebtoken");
+const { passportCall, authorization } = require("../config/utils");
+const { SESSION_SECRET } = require("../config/config");
 
 userRouter.post(
   "/register",
@@ -26,48 +28,43 @@ userRouter.post(
     failureRedirect: "/faillogin",
   }),
   async (req, res) => {
-    if (!req.user)
+    if (!req.user) {
       return res
         .status(400)
         .send({ status: "error", error: "Usuario no encontrado" });
-    req.session.user = {
-      first_name: req.user.first_name,
-      last_name: req.user.last_name,
-      age: req.user.age,
-      email: req.user.email,
-      rol: req.user.rol,
-      cart: req.user.cart,
-    };
-    console.log(req.session);
-    return res
-      .status(200)
-      .send({ message: "success", payload: req.session.user });
+    }
+    const username = req.user.email;
+    const cart = req.user.cart;
+    const firtsname = req.user.first_name;
+    const lastname = req.user.last_name;
+    const rol = req.user.rol;
+    const myToken = jwt.sign(
+      { username, cart, firtsname, lastname, rol },
+      SESSION_SECRET,
+      {
+        expiresIn: "24h",
+      }
+    );
+    res
+      .cookie("CookieToken", myToken, {
+        maxAge: 60 * 60 * 1000,
+      })
+      .send({ message: "Loggeg in!" });
   }
 );
 
-userRouter.get("/current", async (req, res) => {
-  console.log(req.session);
-  // if (req.session.user === undefined) {
-  //   return res
-  //     .status(401)
-  //     .send({ status: "error", message: "No hay una sesión iniciada" });
-  // }
-  // let user = new CurrentDTO(req.session.user);
-  // res.status(200).send(user);
-});
+userRouter.get(
+  "/current",
+  passportCall("jwt"),
+  authorization("Consumer"),
+  (req, res) => {
+    const decoded = jwt.verify(req.cookies.CookieToken, SESSION_SECRET);
+    res.send(decoded);
+  }
+);
 
 userRouter.get("/faillogin", async (req, res) => {
   res.send({ error: "Failed Strategy" });
-});
-
-userRouter.get("/logout", (req, res) => {
-  req.session.destroy((error) => {
-    if (error) {
-      res.status(401).send({ message: "ERROR" });
-    } else {
-      res.status(200).send({ message: "LogoutOK" });
-    }
-  });
 });
 
 module.exports.userRouter = userRouter;
