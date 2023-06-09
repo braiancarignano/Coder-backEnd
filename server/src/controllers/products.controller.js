@@ -2,7 +2,10 @@ const Product = require("../dao/classes/products.dao.js");
 const ProductService = new Product();
 const { CustomError } = require("../services/errors/customErrors.js");
 const EErrors = require("../services/errors/enum.js");
-const { generateProductsErrorInfo } = require("../services/errors/info.js");
+const {
+  generateProductsErrorInfo,
+  deleteProductsErrorInfo,
+} = require("../services/errors/info.js");
 
 const getProduct = async (req, res) => {
   const stock = req.query.stock;
@@ -99,14 +102,33 @@ const updateProduct = async (req, res) => {
   res.send({ status: "success", result });
 };
 
-const deleteProduct = async (req, res) => {
-  let id = req.params.pid;
-  let result = await ProductService.deleteProduct(id);
-  if (!result)
-    return res
-      .status(404)
-      .send({ status: "error", message: "Something went wrong" });
-  res.send({ status: "success", result });
+const deleteProduct = async (req, res, next) => {
+  try {
+    let id = req.params.pid;
+    let result = await ProductService.deleteProduct(id);
+    if (result === null || result === undefined) {
+      CustomError.createError({
+        name: "Product deletion error",
+        cause: deleteProductsErrorInfo({
+          id,
+        }),
+        message: "Error trying to delete Product",
+        code: EErrors.INVALID_TYPES_ERROR,
+      });
+    }
+    req.logger.info(
+      `${req.method} en ${
+        req.url
+      }- ${new Date().toLocaleTimeString()} - Producto eliminado exitosamente`
+    );
+  } catch (error) {
+    req.logger.error(
+      `${req.method} en ${
+        req.url
+      }- ${new Date().toLocaleTimeString()} - Error al eliminar el producto`
+    );
+    next(error);
+  }
 };
 
 module.exports = {

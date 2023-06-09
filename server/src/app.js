@@ -9,6 +9,8 @@ const initializePassport = require("./config/passportConfig.js");
 const { LINK_DB, COOKIE_SECRET } = require("./config/config.js");
 const cors = require("cors");
 const { Server } = require("socket.io");
+const swaggerJsdoc = require("swagger-jsdoc");
+const swaggerUiExpress = require("swagger-ui-express");
 const errorHandler = require("./middlewares/error.js");
 const { productsRouter } = require("./routes/products.router.js");
 const { cartRouter } = require("./routes/carts.router.js");
@@ -20,6 +22,12 @@ const { loggerRouter } = require("./routes/logger.router.js");
 const { addLogger } = require("./config/logger.js");
 const httpServer = app.listen(PORT, () => console.log(`Escuchando en ${PORT}`));
 const socketServer = new Server(httpServer);
+const path = require("path");
+const dirname = __dirname;
+const apiDocs = path.join(dirname, "../docs/**/*.yaml");
+
+app.use(errorHandler);
+app.use(addLogger);
 
 app.use(cookieParser(COOKIE_SECRET));
 
@@ -33,8 +41,6 @@ app.use(
     secret: "bla bla bla",
   })
 );
-app.use(errorHandler);
-app.use(addLogger);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -68,6 +74,20 @@ socketServer.on("connection", (socket) => {
   // let products = modelProducts.find().lean()
   // socket.emit("products", products)
 });
+
+//Swagger
+const SwaggerOptions = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "Documentación ecommerce",
+      description: "API de ecommerce",
+    },
+  },
+  apis: [apiDocs],
+};
+const specs = swaggerJsdoc(SwaggerOptions);
+app.use("/apidocs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
 
 const environment = async () => {
   try {

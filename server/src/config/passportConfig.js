@@ -15,7 +15,6 @@ const {
   GITHUB_CLIENT_SECRET,
   SESSION_SECRET,
 } = require("./config.js");
-const { error } = require("winston");
 
 const initializePassport = () => {
   passport.use(
@@ -30,8 +29,9 @@ const initializePassport = () => {
         try {
           const user = await UserService.searchUser(username);
           const carts = await CartService.createCart();
-          if (user)
+          if (user) {
             return done(null, false, { message: "El usuario ya existe" });
+          }
           const newUser = {
             first_name,
             last_name,
@@ -62,17 +62,14 @@ const initializePassport = () => {
       async (username, password, done) => {
         try {
           const user = await UserService.searchUser(username);
-          if (!user)
+          if (!user) {
             return done(null, false, { message: "Usuario no encontrado" });
-          if (!isValidPassword(user, password))
+          }
+          if (!isValidPassword(user, password)) {
             return done(null, false, { message: "Contraseña incorrecta" });
+          }
           return done(null, user);
         } catch (error) {
-          req.logger.error(
-            `${req.method} en ${
-              req.url
-            }- ${new Date().toLocaleTimeString()} - Error al loguear el usuario`
-          );
           return done(error);
         }
       }

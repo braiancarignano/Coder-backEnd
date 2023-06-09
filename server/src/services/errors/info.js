@@ -38,4 +38,14 @@ const genereUserErrorInfo = (user) => {
     password: need to be a string, received --> ${user.password}`;
   return result;
 };
-module.exports = { generateProductsErrorInfo, genereUserErrorInfo };
+const deleteProductsErrorInfo = (id) => {
+  let result = `One propertie were incomplete or not valid.
+    Required properties:
+    ID: need to be a string, received --> ${id}`;
+  return result;
+};
+module.exports = {
+  generateProductsErrorInfo,
+  genereUserErrorInfo,
+  deleteProductsErrorInfo,
+};

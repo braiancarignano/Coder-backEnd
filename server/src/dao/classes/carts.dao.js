@@ -63,11 +63,12 @@ class Cart {
       throw error;
     }
   };
-  deleteProduct = async (id) => {
+  deleteProduct = async (id, product) => {
     try {
       const cartSelect = await modelCart.findOne({ _id: id });
+      const productSelect = await modelProducts.findOne({ _id: product });
       const productsNotDelete = cartSelect.products.filter(
-        (e) => e.IdProducto.toString() !== productId.toString()
+        (e) => e.IdProducto.toString() !== product.toString()
       );
       cartSelect.products = productsNotDelete;
       await modelCart.updateOne({ _id: id }, cartSelect);
