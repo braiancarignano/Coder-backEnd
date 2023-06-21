@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 const Item = ({ title, description, _id, price }) => {
   return (
     <div className="w-64 bg-white border shadow-2xl rounded-xl m-6">
@@ -7,17 +8,17 @@ const Item = ({ title, description, _id, price }) => {
         </h2>
       </div>
       <div className="p-2 flex flex-col text-center items-center">
-        <h3 className="text-blue-800 text-lg font-medium mt-2 uppercase">
-          {title}
-        </h3>
+        <h3 className="text-blue-800 font-medium mt-2 uppercase">{title}</h3>
         <h2 className="text-black-700 text-medium font-medium">
           {description}
         </h2>
-        <h2 className="text-black-700 text-xs m-2">ID: {_id}</h2>
+        <h3 className="text-black-700 text-xs m-2">ID: {_id}</h3>
         <h3 className="text-blue-800 text-2xl font-semibold mt-3">${price}</h3>
-        <button className="my-4 py-2 px-8 font-semibold shadow-lg shadow-blue-700/50 bg-blue-700 text-white rounded-2xl hover:bg-indigo-600 active:bg-indigo-700 disabled:opacity-50 w-full flex items-center justify-center">
-          AGREGAR AL CARRITO
-        </button>
+        <Link to={`/product/${_id}`}>
+          <button className="my-4 py-2 px-8 font-semibold shadow-lg shadow-blue-700/50 bg-blue-700 text-white rounded-2xl hover:bg-indigo-600 active:bg-indigo-700 disabled:opacity-50 w-full flex items-center justify-center">
+            COMPRAR
+          </button>
+        </Link>
       </div>
     </div>
   );

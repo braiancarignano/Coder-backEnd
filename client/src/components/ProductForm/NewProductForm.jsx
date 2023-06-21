@@ -10,8 +10,22 @@ const NewProductForm = () => {
     reset,
   } = useForm();
   const onSubmit = async (data) => {
-    await createProduct(data);
-    alert("Producto creado");
+    const title = data.title;
+    const description = data.description;
+    const code = data.code;
+    const price = data.price;
+    const thumbnail = data.thumbnail;
+    const stock = data.stock;
+    const category = data.category;
+    await createProduct(
+      title,
+      description,
+      code,
+      price,
+      thumbnail,
+      stock,
+      category
+    );
     reset();
   };
   return (
@@ -140,6 +154,25 @@ const NewProductForm = () => {
               })}
             />
             <small className="text-red-400">{errors?.stock?.message}</small>
+          </div>
+          <div className="md:col-span-5">
+            <label htmlFor="category">Category</label>
+            <input
+              type="text"
+              className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+              placeholder="Celulares"
+              {...register("category", {
+                required: {
+                  value: true,
+                  message: "Tienes que colocar la categoria del producto",
+                },
+                minLength: {
+                  value: 3,
+                  message: "Debe tener al menos 3 caracteres",
+                },
+              })}
+            />
+            <small className="text-red-400">{errors?.category?.message}</small>
           </div>
           <div className="md:col-span-5 text-right">
             <div className="items-end">

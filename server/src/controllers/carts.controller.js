@@ -1,4 +1,5 @@
 const Cart = require("../dao/classes/carts.dao.js");
+const { getMail } = require("./mailing.controller.js");
 
 const CartService = new Cart();
 
@@ -34,7 +35,8 @@ const createCart = async (req, res) => {
 const updateCart = async (req, res) => {
   let cid = req.params.cid;
   let pid = req.params.pid;
-  let result = await CartService.updateCart(cid, pid);
+  let quantity = req.body.quantity;
+  let result = await CartService.updateCart(cid, pid, quantity);
   if (!result)
     return res
       .status(404)
@@ -61,6 +63,28 @@ const deleteProduct = async (req, res) => {
       .send({ status: "error", message: "Something went wrong" });
   res.send({ status: "success", result });
 };
+const purchase = async (req, res) => {
+  try {
+    let { user, cartID, totalAmount, products } = req.body;
+    let ticket = await CartService.purchase(
+      user,
+      cartID,
+      totalAmount,
+      products
+    );
+    await getMail(ticket);
+    res.json({
+      status: "success",
+      message: "Compra finalizada con éxito",
+      payload: ticket,
+    });
+  } catch (err) {
+    req.logger.error(
+      `${req.method} en ${req.url}- ${new Date().toLocaleTimeString()}`
+    );
+    res.status(500).send({ status: "error", message: "Something went wrong" });
+  }
+};
 
 module.exports = {
   getCart,
@@ -69,4 +93,5 @@ module.exports = {
   updateCart,
   deleteProductsInCart,
   deleteProduct,
+  purchase,
 };

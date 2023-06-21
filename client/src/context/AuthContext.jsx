@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
+import { redirect } from "react-router-dom";
 
 //Creacion de AuthContext para manejo de estados del carrito
 const AuthContext = createContext([]);
@@ -21,7 +22,9 @@ const AuthProvider = ({ children }) => {
           withCredentials: true,
         }
       );
+      window.location.href = "/";
     } catch (error) {
+      console.log(error.message);
       alert(
         "Los datos ingresados son incorrectos. Compruebalos y vuelve a intentar."
       );
@@ -46,11 +49,18 @@ const AuthProvider = ({ children }) => {
           withCredentials: true,
         }
       );
+      window.location.href = "/login";
     } catch (error) {
+      console.log(error.message);
       alert(
         "Los datos ingresados son incorrectos. Compruebalos y vuelve a intentar."
       );
     }
+  };
+  const cerrarSesion = () => {
+    document.cookie =
+      "CookieToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    window.location.href = "/login";
   };
 
   const userData = async () => {
@@ -64,14 +74,35 @@ const AuthProvider = ({ children }) => {
           withCredentials: true,
         }
       );
-      console.log(response.data);
+      return response.data;
     } catch (error) {
-      console.log(error);
+      if (error.response && error.response.status === 401) {
+        throw new Error("No has iniciado sesion");
+      }
+      if (error.response && error.response.status === 403) {
+        throw new Error("No estás autorizado");
+      } else {
+        console.error(error);
+      }
+    }
+  };
+
+  const userPremium = async (id) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/sessions/premium/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error.message);
+      alert("Lo siento algo ha salido mal");
     }
   };
 
   return (
-    <AuthContext.Provider value={{ login, registerUser, userData }}>
+    <AuthContext.Provider
+      value={{ login, registerUser, userData, cerrarSesion, userPremium }}
+    >
       {children}
     </AuthContext.Provider>
   );

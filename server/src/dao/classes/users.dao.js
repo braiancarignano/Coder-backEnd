@@ -29,6 +29,22 @@ class User {
       throw error;
     }
   };
+  PremiumUser = async (id) => {
+    try {
+      const userExist = await modelUser.findById(id);
+      if (userExist.rol === "Premium")
+        return { message: "El usuario ya es Premium" };
+      if (userExist.rol === "admin")
+        return { message: "El usuario admin no puede ser Premium" };
+      if (userExist) {
+        const user = await modelUser.findByIdAndUpdate(id, { rol: "Premium" });
+        return { message: "Usuario Premium", user };
+      }
+    } catch (error) {
+      console.log(error);
+      throw error;
+    }
+  };
 }
 
 module.exports = User;

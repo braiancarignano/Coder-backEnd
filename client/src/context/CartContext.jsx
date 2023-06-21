@@ -1,46 +1,103 @@
-import { createContext, useContext, useState, useEffect } from "react";
-//Creacion de CartContext para manejo de estados del carrito
+import { createContext, useContext } from "react";
+import axios from "axios";
+import { useAuthContext } from "./AuthContext";
+
 const CartContext = createContext([]);
 export const useCartContext = () => useContext(CartContext);
-//Declara estado de carrito y agregado o eliminado del LocalStorage
-const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState(
-    JSON.parse(localStorage.getItem("localCart")) || []
-  );
-  useEffect(() => {
-    const localCart = JSON.parse(localStorage.getItem("localCart"));
-    if (localCart?.length > 0) {
-      setCart(localCart);
-    }
-  }, []);
-  useEffect(() => {
-    localStorage.setItem("localCart", JSON.stringify(cart));
-  }, [cart]);
 
-  //Agrega productos al carrito
-  const addProduct = (item, quantity) => {
-    let replaceCart;
-    let product = cart.find((product) => product.id === item.id);
-    if (product) {
-      product.quantity += quantity;
-      replaceCart = [...cart];
-    } else {
-      replaceCart = [...cart, { ...item, quantity: quantity }];
+const CartProvider = ({ children }) => {
+  const { userData } = useAuthContext();
+  const getCartById = async (cid) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:8080/api/carts/${cid}`
+      );
+      return response;
+    } catch (error) {
+      alert(
+        "Los datos ingresados son incorrectos. Compruebalos y vuelve a intentar."
+      );
     }
-    setCart(replaceCart);
+  };
+  const getCartUser = async () => {
+    try {
+      const cart = await userData();
+      if (cart.cart == undefined) {
+        return;
+      } else {
+        const response = await getCartById(cart.cart);
+        return response.data.result;
+      }
+    } catch (error) {
+      alert(
+        "Los datos ingresados son incorrectos. Compruebalos y vuelve a intentar."
+      );
+    }
+  };
+  const updateCart = async (cart, productID, product) => {
+    try {
+      const response = await axios.put(
+        `http://localhost:8080/api/carts/${cart}/product/${productID}`,
+        product
+      );
+      return response.data.result;
+    } catch (error) {
+      console.log(error.config);
+      alert(
+        "Los datos ingresados son incorrectos. Compruebalos y vuelve a intentar."
+      );
+    }
+  };
+  const deleteProduct = async (cart, product) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/carts/delete/${cart}/product/${product}`
+      );
+      return response;
+    } catch (error) {
+      alert(
+        "Los datos ingresados son incorrectos. Compruebalos y vuelve a intentar."
+      );
+    }
+  };
+  const deleteProductsInCart = async (cart) => {
+    try {
+      const response = await axios.delete(
+        `http://localhost:8080/api/carts/delete/${cart}`
+      );
+      return response;
+    } catch (error) {
+      alert(
+        "Los datos ingresados son incorrectos. Compruebalos y vuelve a intentar."
+      );
+    }
   };
 
-  //Elimina todos los productos del carrito
-  const clearCart = () => setCart([]);
-
-  //Elimina un producto del carrito segun ID
-  const removeProductInCart = (id) => {
-    return setCart(cart.filter((product) => product.id !== id));
+  const purchase = async (ticket) => {
+    try {
+      console.log(ticket);
+      const response = await axios.post(
+        `http://localhost:8080/api/carts/purchase`,
+        ticket
+      );
+      return response;
+    } catch (error) {
+      alert(
+        "Los datos ingresados son incorrectos. Compruebalos y vuelve a intentar."
+      );
+    }
   };
 
   return (
     <CartContext.Provider
-      value={{ cart, clearCart, removeProductInCart, addProduct }}
+      value={{
+        getCartUser,
+        getCartById,
+        updateCart,
+        deleteProduct,
+        deleteProductsInCart,
+        purchase,
+      }}
     >
       {children}
     </CartContext.Provider>

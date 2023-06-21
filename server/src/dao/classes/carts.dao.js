@@ -1,5 +1,7 @@
 const modelCart = require("../models/carts.js");
 const modelProducts = require("../models/products.js");
+const modelTickets = require("../models/tickets.js");
+const crypto = require("crypto");
 
 class Cart {
   getCart = async () => {
@@ -17,7 +19,6 @@ class Cart {
       return data;
     } catch (error) {
       console.log(error);
-      throw error;
     }
   };
   createCart = async (cart) => {
@@ -29,14 +30,14 @@ class Cart {
       throw error;
     }
   };
-  updateCart = async (cartId, productId) => {
+  updateCart = async (cartId, productId, quantity) => {
     try {
       const cartSelect = await modelCart.findOne({ _id: cartId });
       const productSelect = await modelProducts.findOne({ _id: productId });
       const idProductDB = productSelect._id;
       let newProductInCart = {
         IdProducto: idProductDB,
-        quantity: 1,
+        quantity: quantity,
       };
 
       const searchProductInCart = cartSelect.products.find(
@@ -46,13 +47,17 @@ class Cart {
       if (searchProductInCart) {
         cartSelect.products.map((e) => {
           if (e.IdProducto.toString() === idProductDB.toString()) {
-            e.quantity++;
+            let num = parseInt(e.quantity, 10);
+            let total = (num += parseInt(quantity));
+            e.quantity = total;
           }
         });
+
         await modelCart.updateOne({ _id: cartId }, cartSelect);
       } else {
         cartSelect.products.push({
           title: productSelect.title,
+          price: productSelect.price,
           ...newProductInCart,
         });
         await modelCart.updateOne({ _id: cartId }, cartSelect);
@@ -66,7 +71,7 @@ class Cart {
   deleteProduct = async (id, product) => {
     try {
       const cartSelect = await modelCart.findOne({ _id: id });
-      const productSelect = await modelProducts.findOne({ _id: product });
+      // const productSelect = await modelProducts.findOne({ _id: product });
       const productsNotDelete = cartSelect.products.filter(
         (e) => e.IdProducto.toString() !== product.toString()
       );
@@ -87,6 +92,24 @@ class Cart {
     } catch (error) {
       console.log(error);
       throw error;
+    }
+  };
+  purchase = async (user, cartID, totalAmount, products) => {
+    try {
+      let date = new Date();
+      let ticketInfo = {
+        code: crypto.randomUUID(),
+        purchase_datetime: date.toLocaleString(),
+        amount: totalAmount,
+        purcharser: user,
+        products: products,
+      };
+      const data = await modelTickets.create(ticketInfo);
+      await this.deleteProductsInCart(cartID);
+      return data;
+    } catch (err) {
+      console.log(err);
+      throw err;
     }
   };
 }

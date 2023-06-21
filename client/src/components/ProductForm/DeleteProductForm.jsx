@@ -13,7 +13,6 @@ const DeleteProductForm = () => {
   const onSubmit = async (data) => {
     await deleteProduct(data.id);
     reset();
-    alert("Producto eliminado");
   };
   return (
     <div className="bg-white rounded shadow-lg p-4 px-4 md:p-8 mb-6">

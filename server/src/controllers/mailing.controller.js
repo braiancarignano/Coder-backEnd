@@ -13,15 +13,15 @@ const getMail = async (req, res) => {
     });
 
     let info = await transporter.sendMail({
-      from: `ecommerce <${config.MAIL_USER}>`, // direccion de envio
-      to: `${req.purcharser}`, // lista de quienes reciben
-      subject: `Compra`, // Asunto
-      text: "Su compra en ecommerce", // Texto plano
-      html: `<div>
-                <p>Código de compra: ${req.code}</p>
-                <p>Fecha: ${req.purchase_datetime}</p>
-                <p>Monto: $ ${req.amount}</p>
-                <p>Usuario: ${req.purcharser}</p>
+      from: `MUNDOTECH <${config.MAIL_USER}>`, // dirección de envío
+      to: `${req.purcharser}`, // lista de destinatarios
+      subject: `Su compra en MUNDOTECH`, // asunto
+      html: `<div style="font-family: 'Inter', Arial, sans-serif; background: linear-gradient(to top right, #1e40af, #7e22ce); color: #ffffff; text-align: center; padding: 20px; box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); margin: 20px auto; max-width: 500px;">
+                <h1 style="font-size: 24px;">Gracias por su compra en MUNDOTECH</h1>
+                <p style="margin-bottom: 10px;">Usuario: <span style="color: #ffffff;">${req.purcharser}</span></p>
+                <p style="margin-bottom: 10px;">Código de compra: <strong>${req.code}</strong></p>
+                <p style="margin-bottom: 10px;">Fecha: ${req.purchase_datetime}</p>
+                <p style="margin-bottom: 0;">Monto: $ ${req.amount}</p>
               </div>`,
     });
   } catch (error) {

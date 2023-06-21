@@ -40,3 +40,35 @@
 {"level":"error","message":"POST en /- 06:53:36 - Error al crear el producto"}
 {"level":"error","message":"POST en /- 06:56:48 - Error al crear el producto"}
 {"level":"error","message":"POST en /- 06:59:43 - Error al crear el producto"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:37:49 - Error al crear el usuario"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:39:04 - soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:39:51 - soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:40:56 [object Object]- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:41:02 [object Object]- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:41:46 null- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:43:00- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:43:21- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:49:55- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:55:49- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:56:23- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:56:43- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 23:59:39- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 00:00:50- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 00:01:35- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 00:03:35- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 00:04:04- soy error 3"}
+{"level":"error","message":"POST en /premium/644a8573fda0bcd34c3227dc- 00:06:46- soy error 3"}
+{"level":"error","message":"POST en /login- 00:07:08 - Missing credentials"}
+{"level":"error","message":"POST en /login- 00:07:29 - Missing credentials"}
+{"level":"error","message":"POST en /purchase- 21:30:10"}
+{"level":"error","message":"POST en /purchase- 21:36:26"}
+{"level":"error","message":"POST en /purchase- 21:37:17"}
+{"level":"error","message":"POST en /purchase- 21:37:47"}
+{"level":"error","message":"POST en /purchase- 21:53:31"}
+{"level":"error","message":"POST en /purchase- 22:23:08"}
+{"level":"error","message":"POST en /purchase- 22:29:08"}
+{"level":"error","message":"POST en /purchase- 22:31:16"}
+{"level":"error","message":"POST en /purchase- 22:32:44"}
+{"level":"error","message":"POST en /purchase- 22:34:08"}
+{"level":"error","message":"POST en /purchase- 22:34:38"}
+{"level":"error","message":"POST en /purchase- 22:35:25"}

@@ -43,7 +43,6 @@ const ProductsProvider = ({ children }) => {
       );
     }
   };
-  //FALTA COMPLETAR PARA LA VISTA DETALLE DEL PRODUCTO
   const getProductsByID = async (id) => {
     try {
       const response = await axios.get(
@@ -56,7 +55,24 @@ const ProductsProvider = ({ children }) => {
       );
     }
   };
-  const createProduct = async (product) => {
+  const createProduct = async (
+    title,
+    description,
+    code,
+    price,
+    thumbnail,
+    stock,
+    category
+  ) => {
+    const product = {
+      title,
+      description,
+      code,
+      price,
+      thumbnail,
+      stock,
+      category,
+    };
     try {
       const response = await axios.post(
         `http://localhost:8080/api/products`,

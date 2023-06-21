@@ -9,6 +9,7 @@ const cartsSchema = new mongoose.Schema(
           ref: "products",
         },
         title: String,
+        price: String,
         quantity: String,
         _id: false,
       },

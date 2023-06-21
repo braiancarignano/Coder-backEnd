@@ -24,10 +24,10 @@ const passportCall = (strategy) => {
   };
 };
 
-const authorization = (role) => {
+const authorization = (...roles) => {
   return async (req, res, next) => {
     if (!req.user) return res.status(401).send({ error: "Unauthorized" });
-    if (req.user.rol != role)
+    if (!roles.includes(req.user.rol))
       return res.status(403).send({ error: "No permissions" });
     next();
   };
@@ -36,8 +36,8 @@ const authorization = (role) => {
 faker.locale = "es";
 const generateProduct = () => {
   return {
-    title: faker.commerce.productName(),
-    description: faker.commerce.productMaterial(),
+    title: faker.commerce.productMaterial(),
+    description: faker.commerce.productName(),
     code: faker.datatype.uuid(),
     price: parseInt(faker.commerce.price(0, 1500)),
     thumbnail: faker.image.imageUrl(),

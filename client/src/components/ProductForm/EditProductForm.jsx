@@ -15,7 +15,6 @@ const EditProductForm = () => {
     );
     const id = data.id;
     await updateProduct(id, filteredData);
-    alert("Producto editado");
     reset();
   };
   return (
@@ -29,7 +28,7 @@ const EditProductForm = () => {
         </div>
         <form onSubmit={handleSubmit(onSubmit)} className="lg:col-span-2">
           <div className="md:col-span-3">
-            <label htmlFor="productDeleteID">ID Producto</label>
+            <label htmlFor="productDeleteID">ID Producto a editar</label>
             <input
               type="text"
               className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
@@ -142,6 +141,25 @@ const EditProductForm = () => {
               })}
             />
             <small className="text-red-400">{errors?.stock?.message}</small>
+          </div>
+          <div className="md:col-span-5">
+            <label htmlFor="category">Category</label>
+            <input
+              type="text"
+              className="h-10 border mt-1 rounded px-4 w-full bg-gray-50"
+              placeholder="Celulares"
+              {...register("category", {
+                required: {
+                  value: true,
+                  message: "Tienes que colocar la categoria del producto",
+                },
+                minLength: {
+                  value: 3,
+                  message: "Debe tener al menos 3 caracteres",
+                },
+              })}
+            />
+            <small className="text-red-400">{errors?.category?.message}</small>
           </div>
           <div className="md:col-span-5 text-right">
             <div className="items-end">

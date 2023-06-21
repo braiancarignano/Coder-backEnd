@@ -3,6 +3,8 @@ const passport = require("passport");
 const userRouter = express.Router();
 const jwt = require("jsonwebtoken");
 const { passportCall, authorization } = require("../config/utils");
+const User = require("../dao/classes/users.dao");
+const UserService = new User();
 const { SESSION_SECRET } = require("../config/config");
 
 userRouter.post("/register", (req, res, next) => {
@@ -69,8 +71,9 @@ userRouter.post("/login", (req, res, next) => {
       const firtsname = req.user.first_name;
       const lastname = req.user.last_name;
       const rol = req.user.rol;
+      const id = req.user._id;
       const myToken = jwt.sign(
-        { username, cart, firtsname, lastname, rol },
+        { username, cart, firtsname, lastname, rol, id },
         SESSION_SECRET,
         {
           expiresIn: "24h",
@@ -93,12 +96,20 @@ userRouter.post("/login", (req, res, next) => {
 userRouter.get(
   "/current",
   passportCall("jwt"),
-  authorization("Consumer"),
+  authorization("Consumer", "admin", "Premium"),
   (req, res) => {
     const decoded = jwt.verify(req.cookies.CookieToken, SESSION_SECRET);
     res.send(decoded);
   }
 );
+userRouter.get("/premium/:id", async (req, res) => {
+  const user = await UserService.PremiumUser(req.params.id);
+  if (user.message === "El usuario admin no puede ser Premium")
+    return res.send(user.message);
+  if (user.message === "El usuario ya es Premium")
+    return res.send(user.message);
+  res.send("Usuario premium creado con exito");
+});
 
 userRouter.get("/faillogin", async (req, res) => {});
 

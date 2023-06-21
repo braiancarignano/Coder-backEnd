@@ -1,5 +1,4 @@
-import { Link, Navigate } from "react-router-dom";
-import { useState } from "react";
+import { Link } from "react-router-dom";
 import image from "../../assets/github.png";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../context/AuthContext";
@@ -13,14 +12,11 @@ const LoginForm = () => {
     reset,
   } = useForm();
 
-  const [isSubmitted, setIsSubmitted] = useState(false);
-
   const onSubmit = async (data) => {
     const username = data.email;
     const password = data.password;
     await login(username, password);
     reset();
-    setIsSubmitted(true);
   };
 
   return (
@@ -146,7 +142,6 @@ const LoginForm = () => {
                 <img className="mx-2 w-6 h-6" src={image} />
               </a>
             </div>
-            {isSubmitted && <Navigate to="/" />}
           </form>
         </div>
       </div>

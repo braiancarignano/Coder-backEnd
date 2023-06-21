@@ -1,11 +1,8 @@
-import { Link, Navigate } from "react-router-dom";
-import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useAuthContext } from "../../context/AuthContext";
 
 const Form = () => {
   const { registerUser } = useAuthContext();
-  const [isSubmitted, setIsSubmitted] = useState(false);
   //Desestructura utilidad de libreria para validaciones
   const {
     register,
@@ -20,9 +17,7 @@ const Form = () => {
     const password = data.password;
     const age = data.age;
     await registerUser(first_name, last_name, email, password, age);
-    alert("Registro exitoso");
     reset();
-    setIsSubmitted(true);
   };
 
   //Renderizado de formulario para compra/consulta con sus validaciones y mensajes de error
@@ -160,7 +155,6 @@ const Form = () => {
                     </a>
                   </div>
                 </div>
-                {isSubmitted && <Navigate to="/login" />}
               </form>
             </div>
           </div>
